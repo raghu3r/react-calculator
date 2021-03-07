@@ -1,9 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-ResultScreen.propTypes = {
-    
-};
 
 function ResultScreen(props) {
     return (

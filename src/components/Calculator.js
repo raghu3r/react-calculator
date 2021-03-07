@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import ResultScreen from './ResultScreen';
 import Button from './Button';
-
-Calculator.propTypes = {
-
-};
+import ScientificMode from './ScientificMode'
 
 function Calculator(props) {
     const [result, setResult] = useState(0);
     const [prevOperand, setPrevOperand] = useState();
     const [valList, setValList] = useState([]);
+    const [sciMode, setSciMode] = useState(false);
 
     useEffect(() => {
 
     }, []);
 
-
-    const Operands = ['+', '-', '*', '/', 'Clear', '='];
+    const Operands = ['+', '-', '*', '/', 'Clear', '=', '+/-', 'sq', 'sqrt'];
 
     const CalculatorOperations = {
         "/": (firstVal, secondVal) => firstVal / secondVal,
         "*": (firstVal, secondVal) => firstVal * secondVal,
         "+": (firstVal, secondVal) => firstVal + secondVal,
         "-": (firstVal, secondVal) => firstVal - secondVal,
-        "=": (firstVal, secondVal) => secondVal || firstVal
+        "=": (firstVal, secondVal) => secondVal || firstVal,
+        "+/-": (firstVal) => - firstVal,
+        "sq": (firstVal) => Math.pow(firstVal, 2),
+        'sqrt': (firstVal) => Math.sqrt(firstVal)
     };
 
     const calculate = (operand) => {
@@ -58,9 +57,6 @@ function Calculator(props) {
             setValList(newList);
             showCurrentValue(newList);
         }
-        // setResult(valList)
-        console.log(valList);
-
     }
 
     const showCurrentValue = (list) => {
@@ -68,8 +64,13 @@ function Calculator(props) {
         setResult(lastVal);
     }
 
+    const handleScientificMode = () => {
+        sciMode ? setSciMode(false) : setSciMode(true);
+    }
 
     const calcKeyValues = ['1', '2', '3', '+', '4', '5', '6', '-', '7', '8', '9', '*', 'Clear', '0', '=', '/'];
+
+    const sciModeValues = ['+/-', 'sq', 'sqrt'];
 
     return (
         <div className="calculator">
@@ -78,8 +79,16 @@ function Calculator(props) {
             </div>
             <div className="calculator-numbers">
                 {calcKeyValues.map((keyValue) =>
-                    <Button key={keyValue} keyValue={keyValue} clickHandler={handleOperation} />
+                    <Button key={keyValue} className="button" keyValue={keyValue} clickHandler={handleOperation} />
                 )}
+            </div>
+            <div>
+                <ScientificMode keyValue={'Scientific Mode'} className="button" clickHandler={handleScientificMode} />
+                {sciMode && <div>
+                    {sciModeValues.map((keyValue) =>
+                        <Button keyValue={keyValue} className="button" clickHandler={handleOperation} />
+                    )}
+                </div>}
             </div>
         </div>
     );
